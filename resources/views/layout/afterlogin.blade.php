@@ -18,6 +18,7 @@
 
     ?>
 
+
 </head>
 <body class="page-body" data-url="http://neon.dev">
 <div class="page-container"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
@@ -30,6 +31,7 @@
             <div class="brand">
                 <a href="home">
                     <img src="<?php echo url() ;?>/images/logo.jpg" width="20" height="30" alt="" />
+
 
                 </a>
             </div>
@@ -120,7 +122,7 @@
                     <i class="entypo-download"></i>
                     <span>Download Berkas</span>
                     <?php if ($jumlah['jumlahPB'] > 0 or $jumlah['jumlahPD'] > 0) { ?>
-                    <span class="badge badge-secondary"><?php echo ($jumlah['jumlahPB'] + $jumlah['jumlahPD']);?></span>
+                    <span class="badge badge-secondary"><?php echo ($jumlah['jumlahTotal']);?></span>
                     <?php } ?>
                 </a>
             </li>
@@ -131,6 +133,12 @@
                     <?php if ($jumlah['jumlahPB'] > 0 or $jumlah['jumlahPD'] > 0) { ?>
                     <span class="badge badge-secondary"><?php echo ($jumlah['jumlahPB'] + $jumlah['jumlahPD']);?></span>
                     <?php } ?>
+                </a>
+            </li>
+            <li class="active">
+                <a href="<?php echo url() ;?>/daftaruser">
+                    <i class="entypo-user"></i>
+                    <span>Daftar User</span>
                 </a>
             </li>
             <li class="active">
@@ -157,15 +165,28 @@
                     <span>Monitoring</span>
                 </a>
                 <ul>
-                    <li class="active">
-                        <a href="monitoring/daftarTunggu">
-                            <span>Info Perencanaan</span>
+                    <li>
+                        <a href="<?php echo url() ;?>/monitoringPB">
+                            <i class="entypo-flow-cascade"></i>
+                            <span>Pasang Baru</span>
+                            <?php if ($jumlah['jumlahPB'] > 0) { ?>
+                            <span class="badge badge-secondary"><?php echo $jumlah['jumlahPB'];?></span>
+                            <?php } ?>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo url() ;?>/monitoringPD">
+                            <i class="entypo-flow-cascade"></i>
+                            <span>Perubahan Daya</span>
+                            <?php if ($jumlah['jumlahPD'] > 0) { ?>
+                            <span class="badge badge-secondary"><?php echo $jumlah['jumlahPD'];?></span>
+                            <?php } ?>
                         </a>
                     </li>
                 </ul>
             </li>
             <li class="active">
-                <a href="monitoring/daftarPelanggan">
+                <a href="<?php echo url() ;?>/daftarPelanggan">
                     <i class="entypo-flow-cascade"></i>
                     <span>Daftar Pelanggan</span>
                 </a>
@@ -222,12 +243,13 @@
             </li>
         </ul>
 
-    <?php } elseif (Auth::user()->userlevel == 51601 || Auth::user()->userlevel == 516002) {
+    <?php } elseif (Auth::user()->userlevel == 51601 || Auth::user()->userlevel == 51602 || Auth::user()->userlevel == 51603 || Auth::user()->userlevel == 51604 || Auth::user()->userlevel == 51605
+    || Auth::user()->userlevel == 51606 || Auth::user()->userlevel == 51607 || Auth::user()->userlevel == 51608 || Auth::user()->userlevel == 51609 || Auth::user()->userlevel == 516002) {
     $tingkat = "";
-    if (Auth::user()->userlevel == 51601) {
-        $tingkat = "rayon";
-    } else {
+    if (Auth::user()->userlevel == 516002) {
         $tingkat = "manager";
+    } else {
+        $tingkat = "rayon";
     }
     ?>
     <!-- Sidebar Rayon & Manager -->
@@ -239,7 +261,6 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <?php if (Auth::user()->userlevel == 51601) {?>
             <li class="active">
                 <a href="<?php echo url() ;?>#" target="_blank">
                     <i class="entypo-newspaper"></i>
@@ -261,7 +282,7 @@
                     </li>
                 </ul>
             </li>
-            <?php } ?>
+
             <li class="active">
                 <a href="#" target="_blank">
                     <i class="entypo-newspaper"></i>
@@ -292,22 +313,28 @@
                 </ul>
             </li>
             <li class="active">
+                <a href="<?php echo url() ;?>/datainduk">
+                    <i class="entypo-database"></i>
+                    <span>Data Induk Pelanggan</span>
+                </a>
+            </li>
+            <li class="active">
                 <a href="<?php echo url() ;?>/daftarpelanggan">
                     <i class="entypo-flow-cascade"></i>
                     <span>Daftar Pelanggan</span>
                 </a>
             </li>
 
-
+            <?php } ?>
         </ul>
         <!-- End of Sidebar Rayon & Perencanaan -->
-    <?php } ?>
     <!-- End of Side bar -->
     </div>
     <!-- End of Main Menu -->
 
     <?php
-    echo Html::script('js/gsap/highcharts.js');
+    echo Html::script('js/highcharts.js');
+    echo Html::script('js/jquery-1.11.0.min.js');
     ?>
     <div class="main-content">
         <div class="row">

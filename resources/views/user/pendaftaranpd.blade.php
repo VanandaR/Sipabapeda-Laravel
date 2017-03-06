@@ -33,21 +33,20 @@
                             </thead>
 
                             <tbody>
-                            <?php for($i=0;$i<$jumlah['jumlahPB'];$i++){?>
+                            <?php for($i=0;$i<count($transaksi);$i++){?>
                             <tr>
                                 <td><?php echo $transaksi[$i]->id_customer;?></td>
-                                <td><?php echo $transaksi[$i]->nama;?></td>
-                                <td><?php echo $transaksi[$i]->rayon;?></td>
-                                <td><?php echo $transaksi[$i]->daya_baru;?></td>
+                                <td><?php echo $transaksi[$i]->customerfunction->nama;?></td>
+                                <td><?php echo $customer[$i]->rayonfunction->nama_rayon;?></td>
+                                <td><?php echo $transaksi[$i]->daya_barufunction->daya;?> - <?php echo $transaksi[$i]->daya_barufunction->tarif ;?></td>
 
 
                                 <td>
                                     <a type="button" href="<?php echo url();?>/formPD/<?php echo $transaksi[$i]->no_agenda; ?>" class="btn btn-primary">
                                         Perubahan Daya
+                                        </a>
 
                                     <br>
-
-
                                 </td>
                             </tr>
                             <?php }?>

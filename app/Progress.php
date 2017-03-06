@@ -5,9 +5,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Progress extends Model {
     use SoftDeletes;
-    public function noagendafunction()
+    protected $table='progresses';
+    protected $guarded=[];
+    public function transactionfunction()
     {
-        return $this->belongsTo(Transaction
-        ::class,'no_agenda');
+        return $this->belongsTo(Transaction::class,'no_agenda');
     }
 }

@@ -7,6 +7,7 @@ class Customer extends Model {
 
     protected $primaryKey='id_customer';
     use SoftDeletes;
+    protected $guarded=[];
 
     public function rayonfunction()
     {

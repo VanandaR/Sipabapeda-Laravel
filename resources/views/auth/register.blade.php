@@ -26,7 +26,7 @@
 						<div class="input-group-addon">
 							<i class="entypo-user"></i>
 						</div>
-						<input type="text" class="form-control" name="name" placeholder="Nama" value="{{old('name')}}" autocomplete="off" />
+						<input type="text" class="form-control" name="name" placeholder="Nama" value="{{old('name')}}" autocomplete="on" />
 					</div>
 				</div>
 				<div class="form-group">
@@ -34,7 +34,7 @@
 						<div class="input-group-addon">
 							<i class="entypo-mail"></i>
 						</div>
-						<input type="email" class="form-control" name="email" placeholder="Email" value="{{old('email')}}" autocomplete="off" />
+						<input type="email" class="form-control" name="email" placeholder="Email" value="{{old('email')}}" autocomplete="on" />
 					</div>
 				</div>
 				<div class="form-group">

@@ -12,7 +12,7 @@
 
                 <div class="panel-heading">
                     <div class="panel-title">
-                        <strong>Daftar Pelanggan</strong>
+                        <strong>Rayon</strong>
                     </div>
 
                 </div>
@@ -46,7 +46,7 @@
                             <tr>
                                 <td><?php echo $transaksi[$i]->id_customer;?></td>
                                 <td><?php echo $transaksi[$i]->customerfunction->nama;?></td>
-                                <td><?php echo $transaksi[$i]->customerfunction->rayonfunction->nama_rayon;?></td>
+                                <td><?php echo $customer[$i]->rayonfunction->nama_rayon;?></td>
                                 <td>
                                     <?php
                                     if($transaksi[$i]->jenis == 1){
@@ -60,7 +60,7 @@
                                 </td>
                                 <td><?php echo $transaksi[$i]->rayon;?></td>
                                 <td>
-                                    <a type="button" href="<?php echo url();?>/detailpelanggan/<?php echo $transaksi[$i]->no_agenda; ?>" class="btn btn-success">
+                                    <a type="button" href="<?php echo url();?>/detailPB/<?php echo $transaksi[$i]->no_agenda; ?>" class="btn btn-success">
                                         Detail
                                         <i class="entypo-eye"></i></a>
                                 </td>

@@ -1,6 +1,22 @@
 <?php namespace App\Http\Controllers;
-use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use App\Revision;
+use Carbon\Carbon;
+use Auth;
 use DB;
+use App\Rayon;
+use App\Progress;
+use App\Transaction;
+use App\Customer;
+use App\Power;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
+
 class HomeController extends Controller {
 
 	public function __construct()
@@ -10,58 +26,30 @@ class HomeController extends Controller {
 
 	public function index()
 	{
-        $transaksiPB=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','1');
-        $transaksiPD=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','2');
-        $transaksiTotal=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer');
-        if (\Auth::user()->userlevel == 51601){
-            $jumlahPB=$transaksiPB->where('status_PK','<=','1')->count();
-            $transaksiPB=$transaksiPB->get();
-            $jumlahPD=$transaksiPD->where('status_PK','<=','1')->count();
-            $gettransaksi=$transaksiTotal->get();
-        }else if(\Auth::user()->userlevel == 516002) {
-            $jumlahPB = $transaksiPB->where('status_PK', '=', '2')->where('status_PJBTL', '<=', '1')->count();
-            $transaksiPB = $transaksiPB->get();
-            $jumlahPD = $transaksiPD->where('status_PK', '=', '2')->where('status_PJBTL', '<=', '1')->count();
-            $gettransaksi = $transaksiTotal->get();
-        }else if(\Auth::user()->userlevel == 516001){
-            $jumlahPB=$transaksiPB->where('status_PJBTL','=','2')->where('status_pemasangan_app','<=','1')->count();
-            $transaksiPB=$transaksiPB->get();
-            $jumlahPD=$transaksiPD->where('status_PJBTL','=','2')->where('status_pemasangan_app','<=','1')->count();
-            $gettransaksi=$transaksiTotal->get();
-        }else if(\Auth::user()->userlevel == 516003){
-            $jumlahPB=$transaksiPB->where('status_PJBTL','=','2')->where('status_pemasangan_app','<=','1')->count();
-            $transaksiPB=$transaksiPB->get();
-            $jumlahPD=$transaksiPD->where('status_PJBTL','=','2')->where('status_pemasangan_app','<=','1')->count();
-            $gettransaksi=$transaksiTotal->get();
-        }else if(\Auth::user()->userlevel == 516004){
-            $jumlahPB=$transaksiPB->where('status_PJBTL','=','2')->where('status_pemasangan_app','<=','1')->count();
-            $transaksiPB=$transaksiPB->get();
-            $jumlahPD=$transaksiPD->where('status_PJBTL','=','2')->where('status_pemasangan_app','<=','1')->count();
-            $gettransaksi=$transaksiTotal->get();
-        }else if(\Auth::user()->userlevel == 516005){
-            $jumlahPB=$transaksiPB->where('status_pemasangan_app','=','1')->count();
-            $transaksiPB=$transaksiPB->get();
-            $jumlahPD=$transaksiPD->where('status_pemasangan_app','=','1')->count();
-            $gettransaksi=$transaksiTotal->get();
-        }
+
+        $jumlahPB=Transaction::pasangBaru()->level(Auth::user()->userlevel)->count();
+        $jumlahPD=Transaction::perubahanDaya()->level(Auth::user()->userlevel)->count();
+        $transaksiTotal=Transaction::level(Auth::user()->userlevel)->get();
+        $customer=Customer::all();
+        $jumlahTotal=Transaction::all()->count();
+
+
         $jumlah=array(
+            'jumlahTotal'=>$jumlahTotal,
             'jumlahPB'=>$jumlahPB,
             'jumlahPD'=>$jumlahPD
-
+    
         );
 
 
 
 
-        $jumlahtotal=$jumlahPB+$jumlahPD;
+
         $grafik=DB::select('select tanggal_pemasangan_app, AVG(DATEDIFF(tanggal_pemasangan_app, tanggal_bayar_BP)) as hpl from progresses GROUP BY tanggal_pemasangan_app');
 
         return view('user/dashboard',[
-		    'jumlahbelumbayar'=>$jumlahtotal,
-            'transaksi'=>$gettransaksi,
+            'customer'=>$customer,
+            'transaksi'=>$transaksiTotal,
             'grafik'=>$grafik,
             'jumlah'=>$jumlah
         ]);

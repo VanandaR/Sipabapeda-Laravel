@@ -19,7 +19,8 @@
 
 		<div class="login-form">
 			<div class="login-content">
-				<?php echo Form::open(array('url'=>'auth/login','method'=>'post'));?>
+				<?php echo Form::open(array('url'=>'/auth/login','method'=>'post'));?>
+					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					@if (count($errors) > 0)
 						<div class="alert alert-warning">
 							<ul>

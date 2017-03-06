@@ -22,7 +22,8 @@
                 <div class="panel-body">
 
 
-                    <form class="form-horizontal form-groups-bordered" method="POST" action='<?php echo url() ;?>/pendaftaranPB' ?>
+                    <form class="form-horizontal form-groups-bordered" method="POST" action='<?php echo url() ;?>/pendaftaranPB'>
+
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="form-group">
                             <label for="field-1" class="col-sm-3 control-label" >Nomor agenda</label>
@@ -64,8 +65,8 @@
                             <label for="field-1" class="col-sm-3 control-label">Rayon</label>
 
                             <div class="col-sm-5">
-                                <input type="text" class="form-control" id="field-1" name="rayon"  placeholder="Rayon" value="<?php echo $rayon[0]->nama_rayon;?>" readonly>
-
+                                <input type="text" class="form-control" id="field-1"  placeholder="Rayon" value="<?php echo $rayon[0]->nama_rayon;?>" readonly>
+                                <input type="hidden" name="rayon" value="<?php echo $rayon[0]->id_rayon;?>" readonly>
                             </div>
                         </div>
                         <div class="form-group">

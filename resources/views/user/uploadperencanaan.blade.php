@@ -35,14 +35,14 @@
                             </thead>
 
                             <tbody>
-                            <?php for($i=0;$i<$jumlah['jumlahPB'];$i++){?>
+                            <?php for($i=0;$i<($jumlah['jumlahPB']+$jumlah['jumlahPD']);$i++){?>
                             <tr>
                                 <form role="form" class="form-horizontal form-groups-bordered" action="<?php echo url() ;?>/uploadrencanastore/<?php echo $transaksi[0]->no_agenda ?>" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    <input type="hidden" name="id" value="<?php echo $transaksi[$i]->id;?>">
+                                    <input type="hidden" name="id" value="<?php echo $transaksi[$i]->progressfunction->id;?>">
                                 <td><?php echo $transaksi[$i]->no_agenda;?></td>
-                                <td><?php echo $transaksi[$i]->nama;?></td>
-                                <td><?php echo $transaksi[$i]->rayon;?></td>
+                                <td><?php echo $transaksi[$i]->customerfunction->nama;?></td>
+                                <td><?php echo $customer[$i]->rayonfunction->nama_rayon;?></td>
                                 <td>
                                     <?php
                                     if($transaksi[$i]->jenis == 1){
@@ -65,7 +65,7 @@
 
 
                                 <td class="text-center">
-                                    <input type="checkbox" id="konstruksi" name="konstruksi" value="2">
+                                    <input type="checkbox" id="konstruksi" name="konstruksi" value="3">
 
                                 </td>
 

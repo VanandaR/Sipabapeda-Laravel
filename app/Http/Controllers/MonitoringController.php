@@ -2,7 +2,9 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Revision;
 use Carbon\Carbon;
+use Auth;
 use DB;
 use App\Rayon;
 use App\Progress;
@@ -17,48 +19,36 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 
 class MonitoringController extends Controller {
+
     public function kajiankelayakan($id){
-        $transaksiPB=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','1');
+        $jumlahPB=Transaction::pasangBaru()->level(Auth::user()->userlevel)->count();
+        $jumlahPD=Transaction::perubahanDaya()->level(Auth::user()->userlevel)->count();
+        $transaksiperid=Transaction::level(Auth::user()->userlevel)->where('no_agenda',$id)->get();
+        $revisi=Revision::where('no_agenda',$id)->get();
 
-        $jumlahPBBelumPK=$transaksiPB->where('status_PK','<=','1')->count();
-
-        $transaksiPD=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','2');
-        $jumlahPDBelumPK=$transaksiPD->where('status_PK','<=','1')->count();
-        $transaksiTotal=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')
-            ->join('rayons','customers.rayon','=','rayons.id_rayon');
-        $transaksiperid=$transaksiTotal->where('progresses.no_agenda','=',$id)->get();
         $jumlah=array(
-            'jumlahPB'=>$jumlahPBBelumPK,
-            'jumlahPD'=>$jumlahPDBelumPK
+            'jumlahPB'=>$jumlahPB,
+            'jumlahPD'=>$jumlahPD
 
         );
-        $revisi=$transaksiPB->join('revisions','revisions.no_agenda','=','transactions.no_agenda')->where('progresses.no_agenda','=',$id)->get();
         return view('user.uploadkajiankelayakan',[
             'revisi'=>$revisi,
             'transaksi'=>$transaksiperid,
             'jumlah'=>$jumlah
         ]);
+
     }
     public function perintahkerja($id){
-        $transaksiPB=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','1');
-        $jumlahPBBelumPK=$transaksiPB->where('status_PK','=','0')->count();
-    $transaksiPD=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','2');
-        $jumlahPDBelumPK=$transaksiPD->where('status_pemasangan_app','=','0')->count();
+        $jumlahPB=Transaction::pasangBaru()->level(Auth::user()->userlevel)->count();
+        $jumlahPD=Transaction::perubahanDaya()->level(Auth::user()->userlevel)->count();
+
+        $revisi=Revision::where('no_agenda',$id)->get();
+        $transaksiperid=Transaction::level(Auth::user()->userlevel)->where('no_agenda',$id)->get();
         $jumlah=array(
-            'jumlahPB'=>$jumlahPBBelumPK,
-            'jumlahPD'=>$jumlahPDBelumPK
+            'jumlahPB'=>$jumlahPB,
+            'jumlahPD'=>$jumlahPD
 
         );
-        $transaksiTotal=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')
-            ->join('rayons','customers.rayon','=','rayons.id_rayon');
-        $transaksiperid=$transaksiTotal->where('progresses.no_agenda','=',$id)->get();
-        $revisi=$transaksiPB->join('revisions','revisions.no_agenda','=','transactions.no_agenda')->where('progresses.no_agenda','=',$id)->get();
         return view('user.uploadperintahkerja',[
             'revisi'=>$revisi,
             'transaksi'=>$transaksiperid,
@@ -66,23 +56,16 @@ class MonitoringController extends Controller {
         ]);
     }
     public function pemasanganapp($id){
-        $transaksiPB=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','1');
+        $jumlahPB=Transaction::pasangBaru()->level(Auth::user()->userlevel)->count();
+        $jumlahPD=Transaction::perubahanDaya()->level(Auth::user()->userlevel)->count();
 
-        $jumlahPB=$transaksiPB->where('status_pemasangan_app','=','1')->count();
-        $transaksiPD=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','2');
-        $jumlahPD=$transaksiPD->where('status_pemasangan_app','=','1')->count();
+        $revisi=Revision::where('no_agenda',$id)->get();
+        $transaksiperid=Transaction::level(Auth::user()->userlevel)->where('no_agenda',$id)->get();
         $jumlah=array(
             'jumlahPB'=>$jumlahPB,
             'jumlahPD'=>$jumlahPD
 
         );
-        $transaksiTotal=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')
-            ->join('rayons','customers.rayon','=','rayons.id_rayon');
-        $transaksiperid=$transaksiTotal->where('progresses.no_agenda','=',$id)->get();
-        $revisi=$transaksiPB->join('revisions','revisions.no_agenda','=','transactions.no_agenda')->where('progresses.no_agenda','=',$id)->get();
         return view('user.uploadpemasanganapp',[
             'revisi'=>$revisi,
             'transaksi'=>$transaksiperid,
@@ -90,82 +73,65 @@ class MonitoringController extends Controller {
         ]);
     }
     public function bayarbp($id){
-        $transaksiPB=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','1');
-        $jumlahPBBelumPK=$transaksiPB->where('status_PK','=','0')->count();
-        $transaksiPD=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','2');
-        $jumlahPDBelumPK=$transaksiPD->where('status_pemasangan_app','=','0')->count();
+        $jumlahPB=Transaction::pasangBaru()->level(Auth::user()->userlevel)->count();
+        $jumlahPD=Transaction::perubahanDaya()->level(Auth::user()->userlevel)->count();
+
+        $transaksiperid=Transaction::level(Auth::user()->userlevel)->where('no_agenda',$id)->get();
         $jumlah=array(
-            'jumlahPB'=>$jumlahPBBelumPK,
-            'jumlahPD'=>$jumlahPDBelumPK
+            'jumlahPB'=>$jumlahPB,
+            'jumlahPD'=>$jumlahPD
 
         );
-        $transaksiTotal=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')
-            ->join('rayons','customers.rayon','=','rayons.id_rayon');
-        $transaksiperid=$transaksiTotal->where('progresses.no_agenda','=',$id)->get();
-
-
         return view('user.uploadbayarbp',[
             'transaksi'=>$transaksiperid,
             'jumlah'=>$jumlah
         ]);
     }
     public function pjbtl($id){
-        $transaksiPB=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','1');
-        $jumlahPBBelumPJBTL=$transaksiPB->where('status_PJBTl','<=','1')->count();
-        $transaksiPD=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','2');
-        $jumlahPDBelumPJBTL=$transaksiPD->where('status_PJBTL','<=','1')->count();
+        $jumlahPB=Transaction::pasangBaru()->level(Auth::user()->userlevel)->count();
+        $jumlahPD=Transaction::perubahanDaya()->level(Auth::user()->userlevel)->count();
+
+        $revisi=Revision::where('no_agenda',$id)->get();
+        $transaksiperid=Transaction::level(Auth::user()->userlevel)->where('no_agenda',$id)->get();
         $jumlah=array(
-            'jumlahPB'=>$jumlahPBBelumPJBTL,
-            'jumlahPD'=>$jumlahPDBelumPJBTL
+            'jumlahPB'=>$jumlahPB,
+            'jumlahPD'=>$jumlahPD
 
         );
-        $transaksiTotal=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')
-            ->join('rayons','customers.rayon','=','rayons.id_rayon');
-        $transaksiperid=$transaksiTotal->where('progresses.no_agenda','=',$id)->get();
-        $revisi=$transaksiPB->join('revisions','revisions.no_agenda','=','transactions.no_agenda')->where('progresses.no_agenda','=',$id)->get();
         return view('user.uploadpjbtl',[
             'revisi'=>$revisi,
             'transaksi'=>$transaksiperid,
             'jumlah'=>$jumlah
         ]);
     }
-    public function downloadberkas(){
-        $transaksiPB=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')
-            ->where('jenis','=','1');
-        $transaksiPD=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','2');
-        if (\Auth::user()->userlevel == 51601){
-            $jumlahPB=$transaksiPB->where('status_PK','<=','1')->count();
-            $jumlahPD=$transaksiPD->where('status_PK','<=','1')->count();
-        }else if(\Auth::user()->userlevel == 516002){
-            $jumlahPB=$transaksiPB->where('status_PK','=','2')->where('status_PJBTL','<=','1')->count();
-            $jumlahPD=$transaksiPD->where('status_PK','=','2')->where('status_PJBTL','<=','1')->count();
-        }else if(\Auth::user()->userlevel == 516001){
-            $jumlahPB=$transaksiPB->where('status_PJBTL','=','2')->where('status_konstruksi','<=','1')->count();
-            $jumlahPD=$transaksiPD->where('status_PJBTL','=','2')->where('status_konstruksi','<=','1')->count();
-        }else if(\Auth::user()->userlevel == 516003){
-            $jumlahPB=$transaksiPB->where('status_konstruksi','=','3')->where('status_pemasangan_app','<=','1')->count();
-            $jumlahPD=$transaksiPD->where('status_konstruksi','=','3')->where('status_pemasangan_app','<=','1')->count();
-        }else if(\Auth::user()->userlevel == 516004){
-            $jumlahPB=$transaksiPB->where('status_PJBTL','=','2')->where('status_pemasangan_app','<=','1')->count();
-            $jumlahPD=$transaksiPD->where('status_PJBTL','=','2')->where('status_pemasangan_app','<=','1')->count();
-        }else if(\Auth::user()->userlevel == 516005){
-            $jumlahPB=$transaksiPB->where('status_pemasangan_app','=','2')->where('status_mutasi_PDL','<=','1')->count();
-            $jumlahPD=$transaksiPD->where('status_pemasangan_app','=','2')->where('status_mutasi_PDL','<=','1')->count();
-        }
 
-        $transaksiTotal=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')
-            ->join('rayons','customers.rayon','=','rayons.id_rayon');
-        $getTransaksi=$transaksiTotal->get();
+
+    public function downloadberkas(){
+        $jumlahPB=Transaction::pasangBaru()->level(Auth::user()->userlevel)->count();
+        $jumlahPD=Transaction::perubahanDaya()->level(Auth::user()->userlevel)->count();
+//        if (\Auth::user()->userlevel == 51601){
+//            $jumlahPB=$transaksiPB->where('status_PK','<=','1')->count();
+//            $jumlahPD=$transaksiPD->where('status_PK','<=','1')->count();
+//        }else if(\Auth::user()->userlevel == 516002){
+//            $jumlahPB=$transaksiPB->where('status_PK','=','2')->where('status_PJBTL','<=','1')->count();
+//            $jumlahPD=$transaksiPD->where('status_PK','=','2')->where('status_PJBTL','<=','1')->count();
+//        }else if(\Auth::user()->userlevel == 516001){
+//            $jumlahPB=$transaksiPB->where('status_PJBTL','=','2')->where('status_konstruksi','<=','1')->count();
+//            $jumlahPD=$transaksiPD->where('status_PJBTL','=','2')->where('status_konstruksi','<=','1')->count();
+//        }else if(\Auth::user()->userlevel == 516003){
+//            $jumlahPB=$transaksiPB->where('status_konstruksi','=','3')->where('status_pemasangan_app','<=','1')->count();
+//            $jumlahPD=$transaksiPD->where('status_konstruksi','=','3')->where('status_pemasangan_app','<=','1')->count();
+//        }else if(\Auth::user()->userlevel == 516004){
+//            $jumlahPB=$transaksiPB->where('status_PJBTL','=','2')->where('status_pemasangan_app','<=','1')->count();
+//            $jumlahPD=$transaksiPD->where('status_PJBTL','=','2')->where('status_pemasangan_app','<=','1')->count();
+//        }else if(\Auth::user()->userlevel == 516005){
+//            $jumlahPB=$transaksiPB->where('status_pemasangan_app','=','2')->where('status_mutasi_PDL','<=','1')->count();
+//            $jumlahPD=$transaksiPD->where('status_pemasangan_app','=','2')->where('status_mutasi_PDL','<=','1')->count();
+//        }
+
+        $transaksiTotal=Transaction::all();
         $jumlahTotal=$transaksiTotal->count();
+        $customer=Customer::all();
         $jumlah=array(
             'jumlahTotal'=>$jumlahTotal,
             'jumlahPB'=>$jumlahPB,
@@ -174,27 +140,26 @@ class MonitoringController extends Controller {
         );
 
         return view('user.downloadberkas',[
-            'transaksi'=>$getTransaksi,
+            'customer'=>$customer,
+            'transaksi'=>$transaksiTotal,
             'jumlah'=>$jumlah
         ]);
     }
     public function rencana(){
-        $transaksiPB=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','1');
-        $transaksiPD=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','2');
 
-        $jumlahPB=$transaksiPB->where('status_Konstruksi','=','1')->count();
-        $jumlahPD=$transaksiPD->where('status_Konstruksi','=','1')->count();
-        $transaksiTotal=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')
-            ->join('rayons','customers.rayon','=','rayons.nama_rayon');
-        $gettransaksi = $transaksiTotal->where('status_Konstruksi','=','1')->get();
+        $jumlahPB=Transaction::pasangBaru()->level(Auth::user()->userlevel)->count();
+        $jumlahPD=Transaction::perubahanDaya()->level(Auth::user()->userlevel)->count();
+        $jumlahTotal=Transaction::all()->count();
+        $customer=Customer::all();
+        $gettransaksi=Transaction::level(Auth::user()->userlevel)->get();
         $jumlah=array(
+            'jumlahTotal'=>$jumlahTotal,
             'jumlahPB'=>$jumlahPB,
             'jumlahPD'=>$jumlahPD
+
         );
         return view('user.uploadperencanaan',[
+            'customer'=>$customer,
             'transaksi'=>$gettransaksi,
             'jumlah'=>$jumlah
         ]);
@@ -203,68 +168,77 @@ class MonitoringController extends Controller {
 
     public function daftarpelanggan(){
         $customer = Customer::all();
-        return $customer[0]->rayonnya->nama_rayon;
-        $transaksiPB=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','1');
-        $transaksiPD=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')->where('jenis','=','2');
-        if (\Auth::user()->userlevel == 51601){
-            $jumlahPB=$transaksiPB->where('status_PK','<=','1')->count();
-            $jumlahPD=$transaksiPD->where('status_PK','<=','1')->count();
-        }else if(\Auth::user()->userlevel == 516002){
-            $jumlahPB=$transaksiPB->where('status_PK','=','2')->where('status_PJBTL','<=','1')->count();
-            $jumlahPD=$transaksiPD->where('status_PK','=','2')->where('status_PJBTL','<=','1')->count();
-        }else if(\Auth::user()->userlevel == 516001){
-            $jumlahPB=$transaksiPB->where('status_PJBTL','=','2')->where('status_konstruksi','<=','1')->count();
-            $jumlahPD=$transaksiPD->where('status_PJBTL','=','2')->where('status_konstruksi','<=','1')->count();
-        }else if(\Auth::user()->userlevel == 516003){
-            $jumlahPB=$transaksiPB->where('status_konstruksi','=','3')->where('status_pemasangan_app','<=','1')->count();
-            $jumlahPD=$transaksiPD->where('status_konstruksi','=','3')->where('status_pemasangan_app','<=','1')->count();
-        }else if(\Auth::user()->userlevel == 516004){
-            $jumlahPB=$transaksiPB->where('status_PJBTL','=','2')->where('status_pemasangan_app','<=','1')->count();
-            $jumlahPD=$transaksiPD->where('status_PJBTL','=','2')->where('status_pemasangan_app','<=','1')->count();
-        }else if(\Auth::user()->userlevel == 516005){
-            $jumlahPB=$transaksiPB->where('status_pemasangan_app','=','2')->where('status_mutasi_PDL','<=','1')->count();
-            $jumlahPD=$transaksiPD->where('status_pemasangan_app','=','2')->where('status_mutasi_PDL','<=','1')->count();
-        }
-
-        $transaksiTotal=DB::table('progresses')->join('transactions','progresses.no_agenda','=','transactions.no_agenda')
-            ->join('customers','transactions.id_customer','=','customers.id_customer')
-            ->join('rayons','customers.rayon','=','rayons.id_rayon');
-        $getTransaksi=$transaksiTotal->get();
+        $jumlahPB=Transaction::pasangBaru()->level(Auth::user()->userlevel)->count();
+        $jumlahPD=Transaction::perubahanDaya()->level(Auth::user()->userlevel)->count();
+        $transaksiTotal=Transaction::distinct()->orderBy('updated_at','desc')->groupBy('id_customer')->get();
         $jumlahTotal=$transaksiTotal->count();
+
         $jumlah=array(
             'jumlahTotal'=>$jumlahTotal,
             'jumlahPB'=>$jumlahPB,
             'jumlahPD'=>$jumlahPD,
-
         );
         return view('user.daftarpelanggan',[
-            'transaksi'=>$getTransaksi,
+            'transaksi'=>$transaksiTotal,
+            'jumlah'=>$jumlah,
+            'customer'=>$customer
+        ]);
+    }
+    public function detailpelanggan($id){
+        $rayons=Rayon::all();
+        $powers=Power::all();
+        $jumlahPB=Transaction::pasangBaru()->level(Auth::user()->userlevel)->count();
+        $transaksiperid=Transaction::where('no_agenda',$id)->get();
+        $jumlahPD=Transaction::perubahanDaya()->level(Auth::user()->userlevel)->count();
+        $jumlah=array(
+            'jumlahPB'=>$jumlahPB,
+            'jumlahPD'=>$jumlahPD
+
+        );
+        return view('user.detailpelanggan',[
+            'rayon'=>$rayons,
+            'power'=>$powers,
+            'transaksi'=>$transaksiperid,
             'jumlah'=>$jumlah
         ]);
     }
 
 
     public function kajiankelayakanstore(Request $request){
-        $file = array('kajiankelayakan' => Input::file('filekajiankelayakan'));
+        $file = array('rab' => Input::file('filerab'),'survei' => Input::file('filesurvei'),'analisis' => Input::file('fileanalisis'));
+
         // setting up rules
-        $rules = array('kajiankelayakan' => 'required',);
+        $rules = array('rab' => 'required', 'survei'=>'required','analisis'=>'required');
         $validator = Validator::make($file, $rules);
+
         if ($validator->fails()) {
             // send back to the page with the input data and errors
             return Redirect::to('monitoringPB');
         }
+
         else {
             // checking file is valid.
-            if (Input::file('filekajiankelayakan')->isValid()) {
+            if (Input::file('filerab')->isValid() && Input::file('filerab')->isValid() && Input::file('filerab')->isValid()) {
                 $destinationPath = 'files'; // upload path
-                $fileName = Input::file('filekajiankelayakan')->getClientOriginalName(); // renameing image
-                Input::file('filekajiankelayakan')->move($destinationPath, $fileName); // uploading file to given path
+                $fileRab = Input::file('filerab')->getClientOriginalName();
+                $fileSurvei = Input::file('filesurvei')->getClientOriginalName();
+                $fileAnalisis = Input::file('fileanalisis')->getClientOriginalName();
+                Input::file('filerab')->move($destinationPath, $fileRab);
+                Input::file('filesurvei')->move($destinationPath, $fileSurvei);
+                Input::file('fileanalisis')->move($destinationPath, $fileAnalisis);// uploading file to given path
                 // sending back with message
 
-                DB::table('progresses')->where('id',$request->id)->update([
-                    'file_kajian_kelayakan'=>$fileName,
+                Progress::find($request->id)->update([
+                    'file_rab'=>$fileRab,
+                    'file_survei'=>$fileSurvei,
+                    'file_analisis'=>$fileAnalisis,
+                    'status_kajian_kelayakan'=>2,
+                    'status_bayar_BP'=>1
+                ]);
+                Progress::find($request->id)->update([
+                    'file_rab'=>$fileRab,
+                    'file_survei'=>$fileSurvei,
+                    'file_analisis'=>$fileAnalisis,
                     'status_kajian_kelayakan'=>2,
                     'status_bayar_BP'=>1
                 ]);
@@ -276,15 +250,13 @@ class MonitoringController extends Controller {
                 return Redirect::to('monitoringPB');
             }
         }
-
-
-
     }
     public function perintahkerjastore(Request $request){
         $file = array('fileperintahkerja' => Input::file('fileperintahkerja'));
         // setting up rules
         $rules = array('fileperintahkerja' => 'required',);
         $validator = Validator::make($file, $rules);
+
         if ($validator->fails()) {
             // send back to the page with the input data and errors
             return Redirect::to('monitoringPB');
@@ -296,7 +268,7 @@ class MonitoringController extends Controller {
                 $fileName = Input::file('fileperintahkerja')->getClientOriginalName(); // renameing image
                 Input::file('fileperintahkerja')->move($destinationPath, $fileName); // uploading file to given path
                 // sending back with message
-                DB::table('progresses')->where('id',$request->id)->update([
+                Progress::find($request->id)->update([
                     'file_PK'=>$fileName,
                     'status_PK'=>2,
                     'status_PJBTL'=>1
@@ -312,7 +284,7 @@ class MonitoringController extends Controller {
         }
     }
     public function bayarbpstore(Request $request){
-        DB::table('progresses')->where('id',$request->id)->update([
+        Progress::find($request->id)->update([
             'tanggal_bayar_BP'=>$request->tanggal_bayar_BP,
             'status_bayar_BP'=>2,
             'status_PK'=>1
@@ -336,11 +308,12 @@ class MonitoringController extends Controller {
                 $fileName = Input::file('filepjbtl')->getClientOriginalName(); // renameing image
                 Input::file('filepjbtl')->move($destinationPath, $fileName); // uploading file to given path
                 // sending back with message
-                DB::table('progresses')->where('id',$request->id)->update([
+                Progress::find($request->id)->update([
                     'file_PJBTL'=>$fileName,
                     'status_PJBTL'=>2,
                     'status_konstruksi'=>1
                 ]);
+
 
                 return Redirect::to('monitoringPB');
             }
@@ -354,17 +327,40 @@ class MonitoringController extends Controller {
     public function rencanastore(Request $request){
 
         if($request->konstruksi==3){
-            DB::table('progresses')->where('id',$request->id)->update([
+            Progress::find($request->id)->update([
                 'status_konstruksi'=>3,
-                'status_comissioning_test'=>1
+                'status_pembangunan_jtm'=>1
             ]);
         }else{
-            DB::table('progresses')->where('id',$request->id)->update([
-                'status_konstruksi'=>3,
+            Progress::find($request->id)->update([
+                'status_konstruksi'=>2,
                 'status_pemasangan_app'=>1
             ]);
         }
         return Redirect::to('uploadrencana');
+    }
+    public function konstruksistore(Request $request){
+        if($request->pembangunanjtm==2){
+            Progress::find($request->id)->update([
+                'status_pembangunan_jtm'=>2,
+                'status_commisioning_test'=>1
+            ]);
+        }
+
+        if($request->comissioningtest==2){
+            Progress::find($request->id)->update([
+                'status_commisioning_test'=>2,
+                'status_cek_SLO'=>1
+            ]);
+        }
+
+        if($request->pengecekanslo==2){
+            Progress::find($request->id)->update([
+                'status_cek_SLO'=>2,
+                'status_pemasangan_app'=>1
+            ]);
+        }
+        return Redirect::to('monitoringPB');
     }
     public function pemasanganappstore(Request $request){
         $file = array('filepemasanganapp' => Input::file('filepemasanganapp'));
@@ -382,7 +378,7 @@ class MonitoringController extends Controller {
                 $fileName = Input::file('filepemasanganapp')->getClientOriginalName(); // renameing image
                 Input::file('filepemasanganapp')->move($destinationPath, $fileName); // uploading file to given path
                 // sending back with message
-                DB::table('progresses')->where('id',$request->id)->update([
+                Progress::find($request->id)->update([
                     'file_pemasangan_app'=>$fileName,
                     'status_pemasangan_app'=>2,
                     'status_mutasi_PDL'=>1
@@ -397,4 +393,5 @@ class MonitoringController extends Controller {
             }
         }
     }
+
 }

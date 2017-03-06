@@ -8,7 +8,7 @@
 
         <div class="panel-heading">
             <div class="panel-title">
-                <strong>Upload Kajian Kelayakan</strong>
+                <strong>Edit Data Pendaftar</strong>
             </div>
 
         </div>
@@ -28,50 +28,50 @@
                         <a href="#tab1" data-toggle="tab"><span>1</span>Pelanggan Mendaftar</a>
                     </li>
 
-                    <?php if ($transaksi[0]->status_kajian_kelayakan > 1) {
+                    <?php if ($transaksi[0]->progressfunction->status_kajian_kelayakan > 1) {
                         echo '<li class="completed">';
-                    } elseif ($transaksi[0]->status_kajian_kelayakan <= 1) {
+                    } elseif ($transaksi[0]->progressfunction->status_kajian_kelayakan <= 1) {
                         echo '<li class="active">';
                     } else {
                         echo "<li>";
                     } ?>
                     <a href="#tab2" data-toggle="tab"><span>2</span>Rayon
-                        <?php if ($transaksi[0]->status_kajian_kelayakan > 1) {
+                        <?php if ($transaksi[0]->progressfunction->status_kajian_kelayakan > 1) {
                             echo 'Telah';
-                        } elseif ($transaksi[0]->status_kajian_kelayakan <= 1) {
+                        } elseif ($transaksi[0]->progressfunction->status_kajian_kelayakan <= 1) {
                             echo 'Belum';
                         } ?>
                         Mengupload Kajian Kelayakan</a>
                     </li>
 
 
-                    <?php if ($transaksi[0]->status_bayar_BP > 1) {
+                    <?php if ($transaksi[0]->progressfunction->status_bayar_BP > 1) {
                         echo '<li class="completed">';
-                    } elseif ($transaksi[0]->status_bayar_BP == 1) {
+                    } elseif ($transaksi[0]->progressfunction->status_bayar_BP == 1) {
                         echo '<li class="active">';
                     } else {
                         echo "<li>";
                     } ?>
                     <a href="#tab3" data-toggle="tab"><span>3</span>Pelanggan
-                        <?php if ($transaksi[0]->status_bayar_BP > 1) {
+                        <?php if ($transaksi[0]->progressfunction->status_bayar_BP > 1) {
                             echo 'Telah';
-                        } elseif ($transaksi[0]->status_bayar_BP <= 1) {
+                        } elseif ($transaksi[0]->progressfunction->status_bayar_BP <= 1) {
                             echo 'Belum';
                         } ?>
                         Membayar BP</a>
                     </li>
 
-                    <?php if ($transaksi[0]->status_PK > 1) {
+                    <?php if ($transaksi[0]->progressfunction->status_PK > 1) {
                         echo '<li class="completed">';
-                    } elseif ($transaksi[0]->status_PK == 1) {
+                    } elseif ($transaksi[0]->progressfunction->status_PK == 1) {
                         echo '<li class="active">';
                     } else {
                         echo "<li>";
                     } ?>
                     <a href="#tab4" data-toggle="tab"><span>4</span>Rayon
-                        <?php if ($transaksi[0]->status_bayar_BP > 1) {
+                        <?php if ($transaksi[0]->progressfunction->status_bayar_BP > 1) {
                             echo 'Telah';
-                        } elseif ($transaksi[0]->status_bayar_BP <= 1) {
+                        } elseif ($transaksi[0]->progressfunction->status_bayar_BP <= 1) {
                             echo 'Belum';
                         } ?>
                         Mengupload PK</a>
@@ -79,23 +79,22 @@
 
 
                 </ul>
-
                 <div class="tab-content">
 
-                    <div class="tab-pane" id="tab1">1</div>
-                    <div class="tab-pane" id="tab2">2</div>
-                    <div class="tab-pane" id="tab3">3</div>
-                    <div class="tab-pane" id="tab4">4</div>
+                    <div class="tab-pane" id="tab1"></div>
+                    <div class="tab-pane" id="tab2"></div>
+                    <div class="tab-pane" id="tab3"></div>
+                    <div class="tab-pane" id="tab4"></div>
 
                 </div>
             </form>
             <hr>
             <form role="form" class="form-horizontal form-groups-bordered" action="<?php echo url() ;?>/updatePB/<?php echo $transaksi[0]->no_agenda ?>" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type="hidden" name="id" value="<?php echo $transaksi[0]->id;?>">
-                <input type="hidden" name="id_customer" value="<?php echo $transaksi[0]->id_customer;?>">
+                <input type="hidden" name="id" value="<?php echo $transaksi[0]->progressfunction->id;?>">
+                <input type="hidden" name="id_customer" value="<?php echo $transaksi[0]->customerfunction->id_customer;?>">
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">Nomor Agenda</label>1
+                    <label class="col-sm-3 control-label">Nomor Agenda</label>
 
                     <div class="col-sm-5">
                         <input type="text" class="form-control" id="field-1" name="no_agenda" value="<?php echo $transaksi[0]->no_agenda;?>" readonly>
@@ -105,21 +104,21 @@
                     <label class="col-sm-3 control-label">Nama</label>
 
                     <div class="col-sm-5">
-                        <input type="text" class="form-control" id="field-1" name="nama" value="<?php echo $transaksi[0]->nama;?>">
+                        <input type="text" class="form-control" id="field-1" name="nama" value="<?php echo $transaksi[0]->customerfunction->nama;?>">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="field-1" class="col-sm-3 control-label">Alamat</label>
 
                     <div class="col-sm-5">
-                        <input type="text" class="form-control" id="field-1" name="alamat" value="<?php echo $transaksi[0]->alamat;?>" placeholder="Alamat" required>
+                        <input type="text" class="form-control" id="field-1" name="alamat" value="<?php echo $transaksi[0]->customerfunction->alamat;?>" placeholder="Alamat" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="field-1" class="col-sm-3 control-label">Nomor Telepon</label>
 
                     <div class="col-sm-5">
-                        <input type="text" class="form-control" id="field-1" name="nomor" value="<?php echo $transaksi[0]->nomorhandphone;?>"  placeholder="Nomor Telepon" required>
+                        <input type="text" class="form-control" id="field-1" name="nomor" value="<?php echo $transaksi[0]->customerfunction->nomorhandphone;?>"  placeholder="Nomor Telepon" required>
                     </div>
                 </div>
 
@@ -130,7 +129,7 @@
                         <select name="rayon" class="form-control" required>
                             <option value="">--Pilih Salah Satu--</option>
                             <?php foreach($rayon as $daftarrayon){ ?>
-                            <option <?php if($transaksi[0]->rayon == $daftarrayon['id_rayon']){echo("selected");}?> value="<?php echo $daftarrayon['id_rayon']?>"><?php echo $daftarrayon['rayon']?></option>
+                            <option <?php if($transaksi[0]->customerfunction->rayon == $daftarrayon['id_rayon']){echo("selected");}?> value="<?php echo $daftarrayon['id_rayon']?>"><?php echo $daftarrayon['nama_rayon']?></option>
                             <?php } ?>
                         </select>
                     </div>

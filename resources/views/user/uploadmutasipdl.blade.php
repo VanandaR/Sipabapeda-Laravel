@@ -1,6 +1,6 @@
 @extends('layout/afterlogin')
 
-@section('judul','Upload Pemasangan App')
+@section('judul','Upload Mutasi PDL')
 
 
 @section('konten')
@@ -25,20 +25,20 @@
                 <ul>
 
 
-                    <?php if ($transaksi[0]->status_pemasangan_app > 1) {
+                    <?php if ($transaksi[0]->progressfunction->status_mutasi_PDL > 1) {
                         echo '<li class="completed">';
-                    } elseif ($transaksi[0]->status_pemasangan_app == 1) {
+                    } elseif ($transaksi[0]->progressfunction->status_mutasi_PDL == 1) {
                         echo '<li class="active">';
                     } else {
                         echo "<li>";
                     } ?>
-                    <a href="#tab8" data-toggle="tab"><span>8</span>Bagian Tranel
-                        <?php if ($transaksi[0]->status_pemasangan_app > 1) {
+                    <a href="#tab8" data-toggle="tab"><span>8</span>Rayon
+                        <?php if ($transaksi[0]->progressfunction->status_mutasi_PDL > 1) {
                             echo 'Telah';
-                        } elseif ($transaksi[0]->status_pemasangan_app <= 1) {
+                        } elseif ($transaksi[0]->progressfunction->status_mutasi_PDL <= 1) {
                             echo 'Belum';
                         } ?>
-                        Memasang App</a>
+                        Mutasi PDL</a>
                     </li>
 
 
@@ -53,9 +53,10 @@
                 </div>
             </form>
             <hr>
-            <form role="form" class="form-horizontal form-groups-bordered" action="<?php echo url() ;?>/pemasanganapp/<?php echo $transaksi[0]->no_agenda ?>" method="post" enctype="multipart/form-data">
+            <form role="form" class="form-horizontal form-groups-bordered" action="<?php echo url() ;?>/mutasipdl/<?php echo $transaksi[0]->no_agenda ?>" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="id" value="<?php echo $transaksi[0]->progressfunction->id;?>">
+
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Nomor Agenda</label>
 
@@ -75,7 +76,7 @@
                     </label>
 
                     <div class="col-sm-5">
-                        <input type="file" name="filepemasanganapp" class="form-control file2 inline btn btn-primary" multiple="1" data-label="<i class='glyphicon glyphicon-circle-arrow-up'></i> &nbsp;Pilih File" required/>
+                        <input type="file" name="filemutasipdl" class="form-control file2 inline btn btn-primary" multiple="1" data-label="<i class='glyphicon glyphicon-circle-arrow-up'></i> &nbsp;Pilih File" required/>
                     </div>
                 </div>
 
@@ -110,8 +111,8 @@
             <tbody>
             <tr>
                 <td><?php echo 1 ?></td>
-                <td><?php echo $transaksi[0]->file_kajian_kelayakan;?></td>
-                <td><?php echo $transaksi[0]->tanggal_kajian_kelayakan;?></td>
+                <td><?php echo $transaksi[0]->progressfunction->file_kajian_kelayakan;?></td>
+                <td><?php echo $transaksi[0]->progressfunction->tanggal_kajian_kelayakan;?></td>
                 <td>
                     <a type="button" class="btn btn-success" href="<?php echo url();?>/files/<?php echo $transaksi[0]->file_kajian_kelayakan;?>">
                         Download

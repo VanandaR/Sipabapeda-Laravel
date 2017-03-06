@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'CreateCategoriesTable' => $baseDir . '/database/migrations/2016_12_11_160951_create_categories_table.php',
     'CreateCustomersTable' => $baseDir . '/database/migrations/2016_11_08_123621_create_customers_table.php',
     'CreateLevelsTable' => $baseDir . '/database/migrations/2016_11_08_064227_create_levels_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
@@ -13,8 +14,8 @@ return array(
     'CreateProgressesTable' => $baseDir . '/database/migrations/2016_11_08_163611_create_progresses_table.php',
     'CreateRayonsTable' => $baseDir . '/database/migrations/2016_11_08_171222_create_rayons_table.php',
     'CreateRevisionsTable' => $baseDir . '/database/migrations/2016_11_28_182458_create_revisions_table.php',
+    'CreateSessionTable' => $baseDir . '/database/migrations/2016_12_22_030952_create_session_table.php',
     'CreateTransactionsTable' => $baseDir . '/database/migrations/2016_11_08_163747_create_transactions_table.php',
-    'CreateUserlevelsTable' => $baseDir . '/database/migrations/2016_11_08_111313_create_userlevels_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',

@@ -251,6 +251,7 @@ class ComposerStaticInit85d5cb1f37b0c7f8db474aa010ca0fe0
     );
 
     public static $classMap = array (
+        'CreateCategoriesTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_11_160951_create_categories_table.php',
         'CreateCustomersTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_08_123621_create_customers_table.php',
         'CreateLevelsTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_08_064227_create_levels_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
@@ -258,8 +259,8 @@ class ComposerStaticInit85d5cb1f37b0c7f8db474aa010ca0fe0
         'CreateProgressesTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_08_163611_create_progresses_table.php',
         'CreateRayonsTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_08_171222_create_rayons_table.php',
         'CreateRevisionsTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_28_182458_create_revisions_table.php',
+        'CreateSessionTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_22_030952_create_session_table.php',
         'CreateTransactionsTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_08_163747_create_transactions_table.php',
-        'CreateUserlevelsTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_08_111313_create_userlevels_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_000000_create_users_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',

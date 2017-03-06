@@ -24,6 +24,7 @@
 
                     <form class="form-horizontal form-groups-bordered" method="POST" action='<?php echo url() ;?>/pendaftaranPD' ?>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="noagendapb" value="<?php echo $transaksi[0]->no_agenda;?>">
                         <div class="form-group">
                             <label for="field-1" class="col-sm-3 control-label" >Nomor agenda</label>
 
@@ -42,21 +43,21 @@
                             <label for="field-1" class="col-sm-3 control-label">Nama</label>
 
                             <div class="col-sm-5">
-                                <input type="text" pattern="[^0-9]+" class="form-control" id="field-1" name="nama" placeholder="Nama"  value="<?php echo $transaksi[0]->nama;?>" readonly>
+                                <input type="text" pattern="[^0-9]+" class="form-control" id="field-1" name="nama" placeholder="Nama"  value="<?php echo $transaksi[0]->customerfunction->nama;?>" readonly>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="field-1" class="col-sm-3 control-label">Alamat</label>
 
                             <div class="col-sm-5">
-                                <input type="text" class="form-control" id="field-1" name="alamat"  placeholder="Alamat" value="<?php echo $transaksi[0]->alamat;?>" readonly>
+                                <input type="text" class="form-control" id="field-1" name="alamat"  placeholder="Alamat" value="<?php echo $transaksi[0]->customerfunction->alamat;?>" readonly>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="field-1" class="col-sm-3 control-label">Nomor Telepon</label>
 
                             <div class="col-sm-5">
-                                <input type="text" class="form-control" id="field-1" name="nomor"  placeholder="Nomor Telepon" value="<?php echo $transaksi[0]->nomorhandphone;?>" readonly>
+                                <input type="text" class="form-control" id="field-1" name="nomor"  placeholder="Nomor Telepon" value="<?php echo $transaksi[0]->customerfunction->nomorhandphone;?>" readonly>
                             </div>
                         </div>
 
@@ -64,7 +65,7 @@
                             <label for="field-1" class="col-sm-3 control-label">Rayon</label>
 
                             <div class="col-sm-5">
-                                <input type="text" class="form-control" id="field-1" name="rayon"  placeholder="Rayon" value="<?php echo $transaksi[0]->rayon;?>" readonly>
+                                <input type="text" class="form-control" id="field-1" name="rayon"  placeholder="Rayon" value="<?php echo $customer[0]->rayonfunction->nama_rayon;?>" readonly>
                                 </select>
                             </div>
                         </div>
@@ -84,7 +85,7 @@
                             <label for="field-1" class="col-sm-3 control-label">Daya dan Tarif Lama</label>
 
                             <div class="col-sm-5">
-                                <input type="text" class="form-control" id="field-1" name="dayalama"  placeholder="Daya Lama" value="<?php echo $transaksi[0]->daya_baru;?>" readonly>
+                                <input type="text" class="form-control" id="field-1" name="dayalama"  placeholder="Daya Lama" value="<?php echo $transaksi[0]->daya_barufunction->tarif;?> - <?php echo $transaksi[0]->daya_barufunction->daya;?>" readonly>
                             </div>
                         </div>
                         <div class="form-group">

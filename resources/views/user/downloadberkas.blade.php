@@ -28,11 +28,11 @@
                                 <th>Nama</th>
                                 <th>Rayon</th>
                                 <th>Jenis</th>
-                                <th>Kajian Kelayakan</th>
+                                <th>Survei</th>
+                                <th>RAB</th>
+                                <th>Analisis</th>
                                 <th>Perintah Kerja</th>
-                                <th>BA Commisioning Test</th>
-                                <th>BA SLO</th>
-                                <th>BA Penyalaan</th>
+                                <th>PJBTL</th>
 
                             </tr>
                             </thead>
@@ -41,8 +41,8 @@
                             <?php for($i=0;$i<$jumlah['jumlahTotal'];$i++){?>
                             <tr>
                                 <td><?php echo $transaksi[$i]->no_agenda;?></td>
-                                <td><?php echo $transaksi[$i]->nama;?></td>
-                                <td><?php echo $transaksi[$i]->rayon;?></td>
+                                <td><?php echo $transaksi[$i]->customerfunction->nama;?></td>
+                                <td><?php echo $customer[$i]->rayonfunction->nama_rayon;?></td>
                                 <td>
                                     <?php
                                     if($transaksi[$i]->jenis == 1){
@@ -57,57 +57,57 @@
 
                                 <td align="center">
                                     <?php
-                                    if($transaksi[$i]->status_kajian_kelayakan <= 1){
+                                    if($transaksi[$i]->progressfunction->status_kajian_kelayakan <= 1){
                                     ?>
                                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                         <?php } else{ ?>
-                                        <a type="button"  href="<?php echo url();?>/files/<?php echo $transaksi[0]->file_kajian_kelayakan;?>">
+                                        <a type="button"  href="<?php echo url();?>/files/<?php echo $transaksi[$i]->progressfunction->file_survei;?>">
                                             <i class="entypo-download"></i></a>
 
                                         <?php } ?>
                                 </td>
-
-
                                 <td align="center">
                                     <?php
-                                    if($transaksi[$i]->status_PK <= 1){
+                                    if($transaksi[$i]->progressfunction->status_kajian_kelayakan <= 1){
                                     ?>
                                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                     <?php } else{ ?>
-                                    <a type="button"  href="<?php echo url();?>/files/<?php echo $transaksi[0]->file_PK;?>">
+                                    <a type="button"  href="<?php echo url();?>/files/<?php echo $transaksi[$i]->progressfunction->file_rab;?>">
                                         <i class="entypo-download"></i></a>
 
                                     <?php } ?>
                                 </td>
                                 <td align="center">
                                     <?php
-                                    if($transaksi[$i]->status_commisioning_test <= 1){
+                                    if($transaksi[$i]->progressfunction->status_kajian_kelayakan <= 1){
                                     ?>
                                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                     <?php } else{ ?>
-                                    <a type="button"  href="<?php echo url();?>/files/<?php echo $transaksi[0]->file_comissioning_test;?>">
+                                    <a type="button"  href="<?php echo url();?>/files/<?php echo $transaksi[$i]->progressfunction->file_analisis;?>">
+                                        <i class="entypo-download"></i></a>
+
+                                    <?php } ?>
+                                </td>
+
+
+                                <td align="center">
+                                    <?php
+                                    if($transaksi[$i]->progressfunction->status_PK <= 1){
+                                    ?>
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    <?php } else{ ?>
+                                    <a type="button"  href="<?php echo url();?>/files/<?php echo $transaksi[$i]->progressfunction->file_PK;?>">
                                         <i class="entypo-download"></i></a>
 
                                     <?php } ?>
                                 </td>
                                 <td align="center">
                                     <?php
-                                    if($transaksi[$i]->status_cek_SLO <= 1){
+                                    if($transaksi[$i]->progressfunction->status_PJBTL <= 1){
                                     ?>
                                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                     <?php } else{ ?>
-                                    <a type="button"  href="<?php echo url();?>/files/<?php echo $transaksi[0]->file_cek_SLO;?>">
-                                        <i class="entypo-download"></i></a>
-
-                                    <?php } ?>
-                                </td>
-                                <td align="center">
-                                    <?php
-                                    if($transaksi[$i]->status_pemasangan_app <= 1){
-                                    ?>
-                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                    <?php } else{ ?>
-                                    <a type="button"  href="<?php echo url();?>/files/<?php echo $transaksi[0]->file_pemasangan_app;?>">
+                                    <a type="button"  href="<?php echo url();?>/files/<?php echo $transaksi[$i]->progressfunction->file_PJBTL;?>">
                                         <i class="entypo-download"></i></a>
 
                                     <?php } ?>
